@@ -1,6 +1,7 @@
 import os
 
 import requests
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 # Load environment variables from .env into system memory
@@ -20,6 +21,11 @@ def fetch_html(url):
     return response.text
 
 
+def parse_html(html):
+    return BeautifulSoup(html, "html.parser")
+
+
 def check_stock_status():
     html = fetch_html(PRODUCT_URL)
+    soup = parse_html(html)
     return
