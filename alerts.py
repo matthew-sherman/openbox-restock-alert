@@ -10,6 +10,12 @@ SMTP_HOST = os.environ.get("SMTP_HOST")
 SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
 SMTP_USER = os.environ.get("SMTP_USER")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
+RESTOCK_EMAIL_LIST = os.environ.get("RESTOCK_EMAIL_LIST")
+
+
+def send_multiple_emails(smtp, email_list):
+    for email in email_list:
+        send_email(smtp, email)
 
 
 def send_email(smtp, email):
@@ -37,8 +43,10 @@ def connect_smtp():
 
 
 def trigger_alert():
+    email_list = RESTOCK_EMAIL_LIST.split(",") if RESTOCK_EMAIL_LIST else []
     smtp_session = connect_smtp()
+
     try:
-        print(smtp_session.noop())
+        send_multiple_emails(smtp_session, email_list)
     finally:
         smtp_session.quit()
