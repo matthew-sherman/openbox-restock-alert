@@ -12,6 +12,11 @@ SMTP_USER = os.environ.get("SMTP_USER")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
 
 
+def send_email(smtp, email):
+    email_message = create_email_message(email)
+    smtp.send_message(email_message)
+
+
 def create_email_message(recipient_email):
     message = EmailMessage()
     message["Subject"] = "Hello World!"
