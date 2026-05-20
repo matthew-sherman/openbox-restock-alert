@@ -1,5 +1,6 @@
 import os
 import smtplib
+from email.message import EmailMessage
 
 from dotenv import load_dotenv
 
@@ -9,6 +10,18 @@ SMTP_HOST = os.environ.get("SMTP_HOST")
 SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
 SMTP_USER = os.environ.get("SMTP_USER")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
+
+
+def create_email_message(recipient_email):
+    message = EmailMessage()
+    message["Subject"] = "Hello World!"
+    message["From"] = SMTP_USER
+    message["To"] = recipient_email
+
+    body = "Hello World!"
+
+    message.set_content(body)
+    return message
 
 
 def connect_smtp():
