@@ -13,23 +13,35 @@ SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
 RESTOCK_EMAIL_LIST = os.environ.get("RESTOCK_EMAIL_LIST")
 
 
-def send_multiple_emails(smtp, email_list):
+def send_multiple_emails(smtp, email_list, product):
     for email in email_list:
-        send_email(smtp, email)
+        send_email(smtp, email, product)
 
 
-def send_email(smtp, email):
-    email_message = create_email_message(email)
+def send_email(smtp, email, product):
+    email_message = create_email_message(email, product)
     smtp.send_message(email_message)
 
 
-def create_email_message(recipient_email):
+def create_email_message(recipient_email, product):
+    name, color, capacity, url = (
+        product.get("name"),
+        product.get("color"),
+        product.get("capacity"),
+        product.get("url"),
+    )
+
     message = EmailMessage()
-    message["Subject"] = "Hello World!"
-    message["From"] = SMTP_USER
+    message["Subject"] = f"🚨 Back In Stock: {color} {name} ({capacity})"
+    message["From"] = f"Restock Alert <{SMTP_USER}>"
     message["To"] = recipient_email
 
-    body = "Hello World!"
+    body = (
+        f"Great news!\n\n"
+        f"The {color.lower()} {name} ({capacity}) you've been waiting for is back in stock!\n\n"
+        f"To purchase, click the link below:\n\n"
+        f"{url}"
+    )
 
     message.set_content(body)
     return message
@@ -42,11 +54,11 @@ def connect_smtp():
     return smtp
 
 
-def trigger_alert():
+def trigger_alert(product):
     email_list = RESTOCK_EMAIL_LIST.split(",") if RESTOCK_EMAIL_LIST else []
     smtp_session = connect_smtp()
 
     try:
-        send_multiple_emails(smtp_session, email_list)
+        send_multiple_emails(smtp_session, email_list, product)
     finally:
         smtp_session.quit()
