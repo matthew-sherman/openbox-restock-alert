@@ -26,13 +26,14 @@ def parse_html(html):
     return BeautifulSoup(html, "html.parser")
 
 
-def extract_product_data(soup):
+def extract_product_data(soup, product_url):
     product = {
         "name": "",
         "model_number": "",
         "color": "",
         "capacity": "",
         "available": False,
+        "url": product_url,
     }
 
     title_el = soup.select_one(".product-meta__title")
@@ -74,4 +75,4 @@ def extract_product_data(soup):
 def check_stock_status():
     html = fetch_html(PRODUCT_URL)
     soup = parse_html(html)
-    return extract_product_data(soup)
+    return extract_product_data(soup, PRODUCT_URL)
