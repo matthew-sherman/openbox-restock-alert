@@ -14,11 +14,18 @@ RESTOCK_EMAIL_LIST = os.environ.get("RESTOCK_EMAIL_LIST")
 
 
 def send_multiple_emails(smtp, email_list, product):
+    success_count = 0
+    failure_count = 0
+
     for email in email_list:
         try:
             send_email(smtp, email, product)
+            success_count += 1
         except Exception as e:
+            failure_count += 1
             print(f"Failed to send email to {email}: {e}")
+
+    return success_count, failure_count
 
 
 def send_email(smtp, email, product):
