@@ -70,7 +70,11 @@ def trigger_alert(product):
 
     try:
         smtp_session = connect_smtp()
-        send_multiple_emails(smtp_session, email_list, product)
+        success_count, failure_count = send_multiple_emails(
+            smtp_session, email_list, product
+        )
+
+        return success_count, failure_count
     finally:
         if smtp_session is not None:
             smtp_session.quit()
