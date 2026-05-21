@@ -59,9 +59,11 @@ def connect_smtp():
 
 def trigger_alert(product):
     email_list = RESTOCK_EMAIL_LIST.split(",") if RESTOCK_EMAIL_LIST else []
-    smtp_session = connect_smtp()
+    smtp_session = None
 
     try:
+        smtp_session = connect_smtp()
         send_multiple_emails(smtp_session, email_list, product)
     finally:
-        smtp_session.quit()
+        if smtp_session is not None:
+            smtp_session.quit()
