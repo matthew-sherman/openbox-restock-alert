@@ -6,6 +6,9 @@ on:
   push:
     branches: [ "main" ]
 
+  schedule:
+    - cron: '0/30 * * * *'
+
 permissions:
   contents: read
 
@@ -32,12 +35,11 @@ jobs:
         env:
           # Map secrets here
           PRODUCT_URL: ${{ secrets.PRODUCT_URL }}
-          
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-
           RESTOCK_EMAIL_LIST: ${{ secrets.RESTOCK_EMAIL_LIST }}
+
           PYTHONUNBUFFERED: "1"
         run: python main.py
