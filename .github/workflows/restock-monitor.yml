@@ -1,0 +1,43 @@
+name: Openbox Restock Monitor
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository Code
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install beautifulsoup4 curl_cffi python-dotenv; fi
+
+      - name: Execute Monitor
+        env:
+          # Map secrets here
+          PRODUCT_URL: ${{ secrets.PRODUCT_URL }}
+          
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+
+          RESTOCK_EMAIL_LIST: ${{ secrets.RESTOCK_EMAIL_LIST }}
+          PYTHONUNBUFFERED: "1"
+        run: python main.py
