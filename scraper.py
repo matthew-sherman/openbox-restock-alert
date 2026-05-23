@@ -1,8 +1,8 @@
 import os
 import re
 
-import requests
 from bs4 import BeautifulSoup
+from curl_cffi import requests
 from dotenv import load_dotenv
 
 # Load environment variables from .env into system memory
@@ -13,12 +13,7 @@ PRODUCT_URL = os.environ.get("PRODUCT_URL")
 
 
 def fetch_html(url):
-    # Use a desktop User-Agent to prevent anti-bot blocking
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
-    }
-
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, impersonate="chrome", timeout=10)
     return response.text
 
 
