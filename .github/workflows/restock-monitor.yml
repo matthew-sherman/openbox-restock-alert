@@ -40,6 +40,8 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           RESTOCK_EMAIL_LIST: ${{ secrets.RESTOCK_EMAIL_LIST }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
 
           PYTHONUNBUFFERED: "1"
         run: python main.py
